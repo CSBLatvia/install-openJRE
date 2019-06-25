@@ -1,7 +1,7 @@
 ---
 title: "Open Java Runtime Environment instalācija"
 author: "MLiberts"
-date: "2019-06-25 10:46:29"
+date: "2019-06-25 10:59:59"
 output:
   html_document: 
     keep_md: yes
@@ -52,7 +52,7 @@ LRA grupā esam izvēlējušies lietot [AdoptOpenJDK](https://adoptopenjdk.net/)
 
 ## Funkcija `install.open.jre`
 
-Open JRE instalāciju var veikt lietotājs. Nav vajadzīga administratora palīdzība. Lai atvieglotu Open JRE instalāciju, ir sagatavota R funkcija `install.open.jre`. Funkcija veic sekojošus instalācijas soļus:
+Open JRE instalāciju var veikt lietotājs. Nav vajadzīga administratora palīdzība. Lai atvieglotu Open JRE instalāciju, ir sagatavota R funkcija `install.open.jre`. Skatīt failu `install_OpenJRE.R`. Funkcija veic sekojošus instalācijas soļus:
 
 - No [github.com](https://github.com/AdoptOpenJDK/openjdk8-binaries/releases) tiek lejupielādēta pēdējā Java 8 JRE portable versija (zip fails) un attiecīgais pārbaudes summas fails (txt fails).
 - Tiek vaikta faila pārbaude ar pārbaudes summu (sha256).
