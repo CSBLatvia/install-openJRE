@@ -1,16 +1,14 @@
 ---
 title: "Open Java Runtime Environment instalācija"
-author: "`r Sys.info()['user']`"
-date: "`r Sys.time()`"
+author: "MLiberts"
+date: "2019-06-25 10:46:29"
 output:
   html_document: 
     keep_md: yes
     toc: yes
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+
 
 # Java
 
