@@ -8,6 +8,8 @@ require(openssl)
 install.open.jre <- function(path.jre = file.path(Sys.getenv("HOME"), "OpenJRE"),
                              set.env.variable = TRUE) {
 
+  dir.create(path.jre, showWarnings = FALSE)
+
   # AdoptOpenJDK/openjdk8-binaries
   html.doc <- read_html("https://github.com/AdoptOpenJDK/openjdk8-binaries/releases")
   url.list <- html_nodes(html.doc, "a") %>% html_attr(name = "href")
