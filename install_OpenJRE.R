@@ -13,10 +13,10 @@ install.open.jre <- function(path.jre = file.path(Sys.getenv("HOME"), "OpenJRE")
   # AdoptOpenJDK/openjdk8-binaries
   html.doc <- read_html("https://github.com/AdoptOpenJDK/openjdk8-binaries/releases")
   url.list <- html_nodes(html.doc, "a") %>% html_attr(name = "href")
-  down.list <- grep("OpenJDK8U-jre_x64_windows_hotspot_8u.*zip", url.list, value = T)
+  down.list <- grep("OpenJDK8U-jre_x64_windows_hotspot_8u.*(zip|zip.sha256.txt)$", url.list, value = T)
 
-  zip.name <- basename(down.list[1])
-  txt.name <- basename(down.list[2])
+  zip.name <- el(basename(grep("zip$", down.list, value = T)))
+  txt.name <- el(basename(grep("txt$", down.list, value = T)))
 
   for (i in 1:2) download.file(url = file.path("https://github.com", down.list[i]),
                                destfile = file.path(path.jre, basename(down.list[i])),
