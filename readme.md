@@ -1,7 +1,7 @@
 ---
 title: "Open Java Runtime Environment instalācija"
 author: "MLiberts"
-date: "2019-06-25 10:59:59"
+date: "2019-07-25 15:15:09"
 output:
   html_document: 
     keep_md: yes
@@ -72,22 +72,21 @@ Liela daļa programmu, piemēram, R un R pakotnes, lietotāja instalētu Java at
 
 OpenJRE instalāciju var pārbaudīt no komandrindas (*Command Prompt* vai *Windows PowerShell*) ar sekojošām komandām:
 
-`java -version` parāda instalēto Java versiju.
-
-```
-C:\Users\MLiberts>java -version
-openjdk version "1.8.0_212"
-OpenJDK Runtime Environment (AdoptOpenJDK)(build 1.8.0_212-b03)
-OpenJDK 64-Bit Server VM (AdoptOpenJDK)(build 25.212-b03, mixed mode)
-```
-
 `echo %JAVA_HOME%` parāda OpenJRE instalācijas mapi.
 
 ```
 C:\Users\MLiberts>echo %JAVA_HOME%
-C:\Users\MLiberts\Documents\OpenJRE\jdk8u212-b04-jre
+C:\Users\MLiberts\Documents\OpenJRE\jdk8u222-b10-jre
 ```
 
+`%JAVA_HOME%\bin\java -version` parāda instalēto Java versiju.
+
+```
+C:\Users\MLiberts>%JAVA_HOME%\bin\java -version
+openjdk version "1.8.0_222"
+OpenJDK Runtime Environment (AdoptOpenJDK)(build 1.8.0_222-b10)
+OpenJDK 64-Bit Server VM (AdoptOpenJDK)(build 25.222-b10, mixed mode)
+```
 
 
 # JDemetra+

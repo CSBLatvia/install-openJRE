@@ -7,6 +7,7 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="MLiberts" />
@@ -343,18 +344,6 @@ summary {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
 
@@ -376,7 +365,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Open Java Runtime Environment instalācija</h1>
 <h4 class="author">MLiberts</h4>
-<h4 class="date">2019-06-25 10:59:59</h4>
+<h4 class="date">2019-07-25 15:15:09</h4>
 
 </div>
 
@@ -451,14 +440,14 @@ $(document).ready(function () {
 <div id="parbaude" class="section level2">
 <h2>Pārbaude</h2>
 <p>OpenJRE instalāciju var pārbaudīt no komandrindas (<em>Command Prompt</em> vai <em>Windows PowerShell</em>) ar sekojošām komandām:</p>
-<p><code>java -version</code> parāda instalēto Java versiju.</p>
-<pre><code>C:\Users\MLiberts&gt;java -version
-openjdk version &quot;1.8.0_212&quot;
-OpenJDK Runtime Environment (AdoptOpenJDK)(build 1.8.0_212-b03)
-OpenJDK 64-Bit Server VM (AdoptOpenJDK)(build 25.212-b03, mixed mode)</code></pre>
 <p><code>echo %JAVA_HOME%</code> parāda OpenJRE instalācijas mapi.</p>
 <pre><code>C:\Users\MLiberts&gt;echo %JAVA_HOME%
-C:\Users\MLiberts\Documents\OpenJRE\jdk8u212-b04-jre</code></pre>
+C:\Users\MLiberts\Documents\OpenJRE\jdk8u222-b10-jre</code></pre>
+<p><code>%JAVA_HOME%\bin\java -version</code> parāda instalēto Java versiju.</p>
+<pre><code>C:\Users\MLiberts&gt;%JAVA_HOME%\bin\java -version
+openjdk version &quot;1.8.0_222&quot;
+OpenJDK Runtime Environment (AdoptOpenJDK)(build 1.8.0_222-b10)
+OpenJDK 64-Bit Server VM (AdoptOpenJDK)(build 25.222-b10, mixed mode)</code></pre>
 </div>
 </div>
 <div id="jdemetra" class="section level1">
@@ -484,6 +473,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
