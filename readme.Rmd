@@ -39,15 +39,13 @@ Lai izkļūtu no šīs neskaidrās situācijas, ir pieņemts lēmums turpmāk va
 
 ## Open Java
 
-Java pirmkods ir brīvi lietojams, bet praksē ir nepieciešama kompilēta Java. Ir vairāki Java devēji, kā piemēram:
+Java pirmkods ir brīvi lietojams, bet praksē ir nepieciešama kompilēta Java. Ir vairāki Java provaideri, kā piemēram:
 
 - [Zulu JDK](https://www.azul.com/downloads/zulu/)
 - [AdoptOpenJDK](https://adoptopenjdk.net/)
 - [Amazon Corretto](https://aws.amazon.com/corretto/)
 
 Teorētiski ir vienalga, kura Open Java versija tiek lietota, jo tās visas ir kompilētas no vienu un tā paša pirmkoda. Kaut gan praksē nelielas atšķirības ir iespējamas. Tāpēc būtu labi, ja darbinieki, kas strādā pie viena projekta izvēlētos vienu un to pašu Open Java relīzi.
-
-LRA grupā esam izvēlējušies lietot [AdoptOpenJDK](https://adoptopenjdk.net/). Pamatā dēļ tā, ka visi kompilācijas kodi ir publicēti [github.com/AdoptOpenJDK](https://github.com/AdoptOpenJDK) un arī instalācijas failus var iegūt no [github.com](https://github.com/AdoptOpenJDK/openjdk8-binaries/releases). Caurspīdīgums vieš uzticamību.
 
 
 # Instalācija
@@ -56,12 +54,18 @@ LRA grupā esam izvēlējušies lietot [AdoptOpenJDK](https://adoptopenjdk.net/)
 
 Open JRE instalāciju var veikt lietotājs. Nav vajadzīga administratora palīdzība. Lai atvieglotu Open JRE instalāciju, ir sagatavota R funkcija `install.open.jre`. Skatīt failu `install_OpenJRE.R`. Funkcija veic sekojošus instalācijas soļus:
 
-- No [github.com](https://github.com/AdoptOpenJDK/openjdk8-binaries/releases) tiek lejupielādēta pēdējā Java 8 JRE portable versija (zip fails) un attiecīgais pārbaudes summas fails (txt fails).
-- Tiek vaikta faila pārbaude ar pārbaudes summu (sha256).
+- No izvēlētā provaidera mājas lapas tiek lejupielādēta pēdējā Java 8 JRE portable versija (zip fails).
+- Tiek vaikta faila pārbaude ar pārbaudes summu (sha256). Tikai AdoptJDK gadījumā.
 - Tiek atarhivēts zip faila saturs.
 - Pēc noklusējuma tiek definēts vides mainīgais (*environment variable*) `JAVA_HOME`. Šo var atslēgt ar funkcijas argumentu `set.env.variable = FALSE`.
 
 Pēc noklusējuma faili tiek saglabāti mapē `C:\Users\[user]\Documents\OpenJRE`. Failu saglabāšanas mapi var mainīt ar funkcijas argumentu `path.jre`. Esošie faili tiek pārrakstīti, bet katrai JRE versijai ir sava mape.
+
+Java provaideri var izvēlēties ar funkcijas parametru `provider`. Iespējamās vērtības ir:
+- `amazon`: instalēs Amazon Corretto,
+- `adopt`: instalēs AdoptOpenJDK,
+- `zulu`: instalēs Zulu JDK.
+Noklusētā vērtība ir `amazon`.
 
 
 
@@ -78,7 +82,7 @@ OpenJRE instalāciju var pārbaudīt no komandrindas (*Command Prompt* vai *Wind
 
 ```
 C:\Users\MLiberts>echo %JAVA_HOME%
-C:\Users\MLiberts\Documents\OpenJRE\jdk8u222-b10-jre
+C:\Users\MLiberts\Documents\OpenJRE\jre8
 ```
 
 `%JAVA_HOME%\bin\java -version` parāda instalēto Java versiju.
@@ -86,8 +90,8 @@ C:\Users\MLiberts\Documents\OpenJRE\jdk8u222-b10-jre
 ```
 C:\Users\MLiberts>%JAVA_HOME%\bin\java -version
 openjdk version "1.8.0_222"
-OpenJDK Runtime Environment (AdoptOpenJDK)(build 1.8.0_222-b10)
-OpenJDK 64-Bit Server VM (AdoptOpenJDK)(build 25.222-b10, mixed mode)
+OpenJDK Runtime Environment Corretto-8.222.10.3 (build 1.8.0_222-b10)
+OpenJDK 64-Bit Server VM Corretto-8.222.10.3 (build 25.222-b10, mixed mode)
 ```
 
 

@@ -270,7 +270,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -365,7 +364,7 @@ summary {
 
 <h1 class="title toc-ignore">Open Java Runtime Environment instalācija</h1>
 <h4 class="author">MLiberts</h4>
-<h4 class="date">2019-07-25 15:15:09</h4>
+<h4 class="date">2019-09-05 15:18:37</h4>
 
 </div>
 
@@ -410,14 +409,13 @@ summary {
 </div>
 <div id="open-java" class="section level2">
 <h2>Open Java</h2>
-<p>Java pirmkods ir brīvi lietojams, bet praksē ir nepieciešama kompilēta Java. Ir vairāki Java devēji, kā piemēram:</p>
+<p>Java pirmkods ir brīvi lietojams, bet praksē ir nepieciešama kompilēta Java. Ir vairāki Java provaideri, kā piemēram:</p>
 <ul>
 <li><a href="https://www.azul.com/downloads/zulu/">Zulu JDK</a></li>
 <li><a href="https://adoptopenjdk.net/">AdoptOpenJDK</a></li>
 <li><a href="https://aws.amazon.com/corretto/">Amazon Corretto</a></li>
 </ul>
 <p>Teorētiski ir vienalga, kura Open Java versija tiek lietota, jo tās visas ir kompilētas no vienu un tā paša pirmkoda. Kaut gan praksē nelielas atšķirības ir iespējamas. Tāpēc būtu labi, ja darbinieki, kas strādā pie viena projekta izvēlētos vienu un to pašu Open Java relīzi.</p>
-<p>LRA grupā esam izvēlējušies lietot <a href="https://adoptopenjdk.net/">AdoptOpenJDK</a>. Pamatā dēļ tā, ka visi kompilācijas kodi ir publicēti <a href="https://github.com/AdoptOpenJDK">github.com/AdoptOpenJDK</a> un arī instalācijas failus var iegūt no <a href="https://github.com/AdoptOpenJDK/openjdk8-binaries/releases">github.com</a>. Caurspīdīgums vieš uzticamību.</p>
 </div>
 </div>
 <div id="instalacija" class="section level1">
@@ -426,12 +424,13 @@ summary {
 <h2>Funkcija <code>install.open.jre</code></h2>
 <p>Open JRE instalāciju var veikt lietotājs. Nav vajadzīga administratora palīdzība. Lai atvieglotu Open JRE instalāciju, ir sagatavota R funkcija <code>install.open.jre</code>. Skatīt failu <code>install_OpenJRE.R</code>. Funkcija veic sekojošus instalācijas soļus:</p>
 <ul>
-<li>No <a href="https://github.com/AdoptOpenJDK/openjdk8-binaries/releases">github.com</a> tiek lejupielādēta pēdējā Java 8 JRE portable versija (zip fails) un attiecīgais pārbaudes summas fails (txt fails).</li>
-<li>Tiek vaikta faila pārbaude ar pārbaudes summu (sha256).</li>
+<li>No izvēlētā provaidera mājas lapas tiek lejupielādēta pēdējā Java 8 JRE portable versija (zip fails).</li>
+<li>Tiek vaikta faila pārbaude ar pārbaudes summu (sha256). Tikai AdoptJDK gadījumā.</li>
 <li>Tiek atarhivēts zip faila saturs.</li>
 <li>Pēc noklusējuma tiek definēts vides mainīgais (<em>environment variable</em>) <code>JAVA_HOME</code>. Šo var atslēgt ar funkcijas argumentu <code>set.env.variable = FALSE</code>.</li>
 </ul>
 <p>Pēc noklusējuma faili tiek saglabāti mapē <code>C:\Users\[user]\Documents\OpenJRE</code>. Failu saglabāšanas mapi var mainīt ar funkcijas argumentu <code>path.jre</code>. Esošie faili tiek pārrakstīti, bet katrai JRE versijai ir sava mape.</p>
+<p>Java provaideri var izvēlēties ar funkcijas parametru <code>provider</code>. Iespējamās vērtības ir: - <code>amazon</code>: instalēs Amazon Corretto, - <code>adopt</code>: instalēs AdoptOpenJDK, - <code>zulu</code>: instalēs Zulu JDK. Noklusētā vērtība ir <code>amazon</code>.</p>
 </div>
 <div id="vides-mainigais-java_home" class="section level2">
 <h2>Vides mainīgais <code>JAVA_HOME</code></h2>
@@ -442,12 +441,12 @@ summary {
 <p>OpenJRE instalāciju var pārbaudīt no komandrindas (<em>Command Prompt</em> vai <em>Windows PowerShell</em>) ar sekojošām komandām:</p>
 <p><code>echo %JAVA_HOME%</code> parāda OpenJRE instalācijas mapi.</p>
 <pre><code>C:\Users\MLiberts&gt;echo %JAVA_HOME%
-C:\Users\MLiberts\Documents\OpenJRE\jdk8u222-b10-jre</code></pre>
+C:\Users\MLiberts\Documents\OpenJRE\jre8</code></pre>
 <p><code>%JAVA_HOME%\bin\java -version</code> parāda instalēto Java versiju.</p>
 <pre><code>C:\Users\MLiberts&gt;%JAVA_HOME%\bin\java -version
 openjdk version &quot;1.8.0_222&quot;
-OpenJDK Runtime Environment (AdoptOpenJDK)(build 1.8.0_222-b10)
-OpenJDK 64-Bit Server VM (AdoptOpenJDK)(build 25.222-b10, mixed mode)</code></pre>
+OpenJDK Runtime Environment Corretto-8.222.10.3 (build 1.8.0_222-b10)
+OpenJDK 64-Bit Server VM Corretto-8.222.10.3 (build 25.222-b10, mixed mode)</code></pre>
 </div>
 </div>
 <div id="jdemetra" class="section level1">
