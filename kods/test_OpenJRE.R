@@ -4,5 +4,5 @@
 
 Sys.getenv("JAVA_HOME")
 
-shell(cmd = "java -version")
 shell(cmd = "echo %JAVA_HOME%")
+shell(cmd = "%JAVA_HOME%/bin/java -version")
