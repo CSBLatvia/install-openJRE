@@ -8,7 +8,7 @@ require(openssl)
 install.open.jre <- function(path.jre = file.path(Sys.getenv("HOME"),
                                                   "OpenJRE"),
                              set.env.variable = TRUE,
-                             provider = "amazon") {
+                             provider = "adopt") {
 
   provider <- tolower(el(as.character(provider)))
 
@@ -36,7 +36,7 @@ install.open.jre <- function(path.jre = file.path(Sys.getenv("HOME"),
     html.doc <- read_html(base.url)
   } else if (provider == "amazon") {
     base.url <- NA_character_
-    html.doc <- read_html("https://docs.aws.amazon.com/corretto/latest/corretto-8-ug/downloads-list.html")
+    html.doc <- read_html("https://github.com/corretto/corretto-8/releases")
   }
 
   url.list <- html_nodes(html.doc, "a") %>% html_attr(name = "href")
@@ -47,7 +47,7 @@ install.open.jre <- function(path.jre = file.path(Sys.getenv("HOME"),
   } else if (provider == "zulu") {
     down.list <- grep("fx-jre8.*-win_x64.zip$", url.list, value = T)
   } else if (provider == "amazon") {
-    down.list <- grep("windows-x64-jre.zip$", url.list, value = T)
+    down.list <- grep("download.*windows-x64-jre.zip$", url.list, value = T)
   }
 
   down.list <- sort(down.list, decreasing = T)
