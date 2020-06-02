@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="MLiberts" />
+<meta name="author" content="djhurio" />
 
 
 <title>Open Java Runtime Environment instalācija</title>
@@ -331,6 +330,7 @@ summary {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -363,23 +363,22 @@ summary {
 
 
 <h1 class="title toc-ignore">Open Java Runtime Environment instalācija</h1>
-<h4 class="author">MLiberts</h4>
-<h4 class="date">2019-09-05 15:18:37</h4>
+<h4 class="author">djhurio</h4>
+<h4 class="date">2020-06-02 08:37:09</h4>
 
 </div>
 
 <div id="TOC">
 <ul>
 <li><a href="#java">Java</a><ul>
-<li><a href="#kapec-ir-vajadziga-java">Kāpēc ir vajadzīga Java?</a></li>
+<li><a href="#kāpēc-ir-vajadzīga-java">Kāpēc ir vajadzīga Java?</a></li>
 <li><a href="#jre-un-jdk">JRE un JDK</a></li>
-<li><a href="#oracle-java">Oracle Java</a></li>
 <li><a href="#open-java">Open Java</a></li>
 </ul></li>
-<li><a href="#instalacija">Instalācija</a><ul>
+<li><a href="#instalācija">Instalācija</a><ul>
 <li><a href="#funkcija-install.open.jre">Funkcija <code>install.open.jre</code></a></li>
-<li><a href="#vides-mainigais-java_home">Vides mainīgais <code>JAVA_HOME</code></a></li>
-<li><a href="#parbaude">Pārbaude</a></li>
+<li><a href="#vides-mainīgais-java_home">Vides mainīgais <code>JAVA_HOME</code></a></li>
+<li><a href="#pārbaude">Pārbaude</a></li>
 </ul></li>
 <li><a href="#jdemetra">JDemetra+</a></li>
 </ul>
@@ -387,7 +386,7 @@ summary {
 
 <div id="java" class="section level1">
 <h1>Java</h1>
-<div id="kapec-ir-vajadziga-java" class="section level2">
+<div id="kāpēc-ir-vajadzīga-java" class="section level2">
 <h2>Kāpēc ir vajadzīga Java?</h2>
 <p>Java ir nepieciešama vairāku programmu darbībai, piemēram:</p>
 <ul>
@@ -400,25 +399,20 @@ summary {
 </div>
 <div id="jre-un-jdk" class="section level2">
 <h2>JRE un JDK</h2>
-<p>JRE ir <em>Java Runtime Environment</em>. JDK ir <em>Java Development Kit</em>. Java izstrādātājiem ir nepieciešams JDK, Java lietotājiem pietiek ar JRE. MND Java programmatūru neizstrādā, attiecīgi mums pietiek ar JRE.</p>
-</div>
-<div id="oracle-java" class="section level2">
-<h2>Oracle Java</h2>
-<p>Līdz šim MND izmantojām <a href="https://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html">Oracle Java JRE</a>. 2019. gada sākumā Oracle mainīja licencēšanas politiku un šī politika ir neskaidra. Joprojām nav skaidrs vai mēs CSP varam lietot Oracle Java JRE 8 bez maksas. Ir dažādi viedokļi.</p>
-<p>Lai izkļūtu no šīs neskaidrās situācijas, ir pieņemts lēmums turpmāk vairs nelietot Oracle Java un lietot kādu citu Open Java distribūciju.</p>
+<p>JRE ir <em>Java Runtime Environment</em>. JDK ir <em>Java Development Kit</em>. Java izstrādātājiem ir nepieciešams JDK, Java lietotājiem pietiek ar JRE.</p>
 </div>
 <div id="open-java" class="section level2">
 <h2>Open Java</h2>
 <p>Java pirmkods ir brīvi lietojams, bet praksē ir nepieciešama kompilēta Java. Ir vairāki Java provaideri, kā piemēram:</p>
 <ul>
-<li><a href="https://www.azul.com/downloads/zulu/">Zulu JDK</a></li>
 <li><a href="https://adoptopenjdk.net/">AdoptOpenJDK</a></li>
 <li><a href="https://aws.amazon.com/corretto/">Amazon Corretto</a></li>
+<li><a href="https://www.azul.com/downloads/zulu/">Zulu JDK</a></li>
 </ul>
 <p>Teorētiski ir vienalga, kura Open Java versija tiek lietota, jo tās visas ir kompilētas no vienu un tā paša pirmkoda. Kaut gan praksē nelielas atšķirības ir iespējamas. Tāpēc būtu labi, ja darbinieki, kas strādā pie viena projekta izvēlētos vienu un to pašu Open Java relīzi.</p>
 </div>
 </div>
-<div id="instalacija" class="section level1">
+<div id="instalācija" class="section level1">
 <h1>Instalācija</h1>
 <div id="funkcija-install.open.jre" class="section level2">
 <h2>Funkcija <code>install.open.jre</code></h2>
@@ -430,15 +424,21 @@ summary {
 <li>Pēc noklusējuma tiek definēts vides mainīgais (<em>environment variable</em>) <code>JAVA_HOME</code>. Šo var atslēgt ar funkcijas argumentu <code>set.env.variable = FALSE</code>.</li>
 </ul>
 <p>Pēc noklusējuma faili tiek saglabāti mapē <code>C:\Users\[user]\Documents\OpenJRE</code>. Failu saglabāšanas mapi var mainīt ar funkcijas argumentu <code>path.jre</code>. Esošie faili tiek pārrakstīti, bet katrai JRE versijai ir sava mape.</p>
-<p>Java provaideri var izvēlēties ar funkcijas parametru <code>provider</code>. Iespējamās vērtības ir: - <code>amazon</code>: instalēs Amazon Corretto, - <code>adopt</code>: instalēs AdoptOpenJDK, - <code>zulu</code>: instalēs Zulu JDK. Noklusētā vērtība ir <code>amazon</code>.</p>
+<p>Java provaideri var izvēlēties ar funkcijas parametru <code>provider</code>. Iespējamās vērtības ir:</p>
+<ul>
+<li><code>adopt</code>: instalēs AdoptOpenJDK,</li>
+<li><code>amazon</code>: instalēs Amazon Corretto,</li>
+<li><code>zulu</code>: instalēs Zulu JDK.</li>
+</ul>
+<p>Noklusētā vērtība ir <code>adopt</code>.</p>
 </div>
-<div id="vides-mainigais-java_home" class="section level2">
+<div id="vides-mainīgais-java_home" class="section level2">
 <h2>Vides mainīgais <code>JAVA_HOME</code></h2>
 <p>Liela daļa programmu, piemēram, R un R pakotnes, lietotāja instalētu Java atrod pēc vides mainīgā (<em>environment variable</em>) <code>JAVA_HOME</code>. Šādā gadījumā vairs nekādas papildus darbības nav nepieciešamas. Atliek pārstartēt R vai RStudio un installētā Java būs pieejama.</p>
 </div>
-<div id="parbaude" class="section level2">
+<div id="pārbaude" class="section level2">
 <h2>Pārbaude</h2>
-<p>OpenJRE instalāciju var pārbaudīt no komandrindas (<em>Command Prompt</em> vai <em>Windows PowerShell</em>) ar sekojošām komandām:</p>
+<p>OpenJRE instalāciju var pārbaudīt no komandrindas (<em>Command Prompt</em>) ar sekojošām komandām:</p>
 <p><code>echo %JAVA_HOME%</code> parāda OpenJRE instalācijas mapi.</p>
 <pre><code>C:\Users\MLiberts&gt;echo %JAVA_HOME%
 C:\Users\MLiberts\Documents\OpenJRE\jre8</code></pre>

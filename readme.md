@@ -1,11 +1,13 @@
 ---
 title: "Open Java Runtime Environment instalācija"
-author: "MLiberts"
-date: "2019-09-05 15:18:37"
+author: "djhurio"
+date: "2020-06-02 08:37:09"
 output:
   html_document: 
     keep_md: yes
     toc: yes
+editor_options: 
+  chunk_output_type: console
 ---
 
 
@@ -25,23 +27,16 @@ Java ir nepieciešama vairāku programmu darbībai, piemēram:
 
 ## JRE un JDK
 
-JRE ir *Java Runtime Environment*. JDK ir *Java Development Kit*. Java izstrādātājiem ir nepieciešams JDK, Java lietotājiem pietiek ar JRE. MND Java programmatūru neizstrādā, attiecīgi mums pietiek ar JRE.
-
-
-## Oracle Java
-
-Līdz šim MND izmantojām [Oracle Java JRE](https://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html). 2019. gada sākumā Oracle mainīja licencēšanas politiku un šī politika ir neskaidra. Joprojām nav skaidrs vai mēs CSP varam lietot Oracle Java JRE 8 bez maksas. Ir dažādi viedokļi.
-
-Lai izkļūtu no šīs neskaidrās situācijas, ir pieņemts lēmums turpmāk vairs nelietot Oracle Java un lietot kādu citu Open Java distribūciju.
+JRE ir *Java Runtime Environment*. JDK ir *Java Development Kit*. Java izstrādātājiem ir nepieciešams JDK, Java lietotājiem pietiek ar JRE.
 
 
 ## Open Java
 
 Java pirmkods ir brīvi lietojams, bet praksē ir nepieciešama kompilēta Java. Ir vairāki Java provaideri, kā piemēram:
 
-- [Zulu JDK](https://www.azul.com/downloads/zulu/)
 - [AdoptOpenJDK](https://adoptopenjdk.net/)
 - [Amazon Corretto](https://aws.amazon.com/corretto/)
+- [Zulu JDK](https://www.azul.com/downloads/zulu/)
 
 Teorētiski ir vienalga, kura Open Java versija tiek lietota, jo tās visas ir kompilētas no vienu un tā paša pirmkoda. Kaut gan praksē nelielas atšķirības ir iespējamas. Tāpēc būtu labi, ja darbinieki, kas strādā pie viena projekta izvēlētos vienu un to pašu Open Java relīzi.
 
@@ -60,10 +55,12 @@ Open JRE instalāciju var veikt lietotājs. Nav vajadzīga administratora palīd
 Pēc noklusējuma faili tiek saglabāti mapē `C:\Users\[user]\Documents\OpenJRE`. Failu saglabāšanas mapi var mainīt ar funkcijas argumentu `path.jre`. Esošie faili tiek pārrakstīti, bet katrai JRE versijai ir sava mape.
 
 Java provaideri var izvēlēties ar funkcijas parametru `provider`. Iespējamās vērtības ir:
-- `amazon`: instalēs Amazon Corretto,
+
 - `adopt`: instalēs AdoptOpenJDK,
+- `amazon`: instalēs Amazon Corretto,
 - `zulu`: instalēs Zulu JDK.
-Noklusētā vērtība ir `amazon`.
+
+Noklusētā vērtība ir `adopt`.
 
 
 
@@ -74,7 +71,7 @@ Liela daļa programmu, piemēram, R un R pakotnes, lietotāja instalētu Java at
 
 ## Pārbaude
 
-OpenJRE instalāciju var pārbaudīt no komandrindas (*Command Prompt* vai *Windows PowerShell*) ar sekojošām komandām:
+OpenJRE instalāciju var pārbaudīt no komandrindas (*Command Prompt*) ar sekojošām komandām:
 
 `echo %JAVA_HOME%` parāda OpenJRE instalācijas mapi.
 
