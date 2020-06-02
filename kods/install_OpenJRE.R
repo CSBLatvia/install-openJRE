@@ -50,6 +50,8 @@ install.open.jre <- function(path.jre = file.path(Sys.getenv("HOME"),
     down.list <- grep("download.*windows-x64-jre.zip$", url.list, value = T)
   }
 
+  if (length(down.list) == 0L) stop("Neizdevās atrast instalācijas failu")
+
   down.list <- sort(down.list, decreasing = T)
 
   zip.name <- el(grep("zip$", down.list, value = T))
