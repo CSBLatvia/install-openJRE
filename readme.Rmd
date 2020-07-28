@@ -47,10 +47,10 @@ Teorētiski ir vienalga, kura Open Java versija tiek lietota, jo tās visas ir k
 
 ## Funkcija `install.open.jre`
 
-Open JRE instalāciju var veikt lietotājs. Nav vajadzīga administratora palīdzība. Lai atvieglotu Open JRE instalāciju, ir sagatavota R funkcija `install.open.jre`. Skatīt failu `install_OpenJRE.R`. Funkcija veic sekojošus instalācijas soļus:
+Open JRE instalāciju var veikt lietotājs. Nav vajadzīga administratora palīdzība. Lai atvieglotu Open JRE instalāciju, ir sagatavota R funkcija `install.open.jre`. Skatīt failu `install-openJRE.R`. Funkcija veic sekojošus instalācijas soļus:
 
 - No izvēlētā provaidera mājas lapas tiek lejupielādēta pēdējā Java 8 JRE portable versija (zip fails).
-- Tiek vaikta faila pārbaude ar pārbaudes summu (sha256). Tikai AdoptJDK gadījumā.
+- Tiek vaikta faila pārbaude ar pārbaudes summu. Tikai AdoptJDK un Amazon gadījumā.
 - Tiek atarhivēts zip faila saturs.
 - Pēc noklusējuma tiek definēts vides mainīgais (*environment variable*) `JAVA_HOME`. Šo var atslēgt ar funkcijas argumentu `set.env.variable = FALSE`.
 
@@ -59,10 +59,10 @@ Pēc noklusējuma faili tiek saglabāti mapē `C:\Users\[user]\Documents\OpenJRE
 Java provaideri var izvēlēties ar funkcijas parametru `provider`. Iespējamās vērtības ir:
 
 - `adopt`: instalēs AdoptOpenJDK,
-- `amazon`: instalēs Amazon Corretto,
+- `amazon`: instalēs Amazon Corretto (noklusētā vērtība),
 - `zulu`: instalēs Zulu JDK.
 
-Noklusētā vērtība ir `adopt`.
+Ir iespējams instalēt Java versijas 8 un 11 (noklusētā vērtība). Abas ir LTS (*long term support*) versijas.
 
 
 

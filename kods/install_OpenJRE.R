@@ -4,60 +4,90 @@
 require(rvest)
 require(openssl)
 
-
-install.open.jre <- function(path.jre = file.path(Sys.getenv("HOME"),
+# Function definition
+install.open.jre <- function(path.jre = file.path(gsub("\\\\", "/",
+                                                       Sys.getenv("HOME")),
                                                   "OpenJRE"),
                              set.env.variable = TRUE,
-                             provider = "adopt") {
+                             provider = "amazon",
+                             version = 11L) {
 
+  # Test OS
+  if (.Platform$OS.type != "windows") stop("Works only on Windows")
+
+
+  # Provider
   provider <- tolower(el(as.character(provider)))
 
-  if (!(provider %in% c("adopt", "zulu", "amazon"))) {
-    stop("Nepareizs JRE provider nosaukums")
-  }
+  if (!(provider %in% c("adopt", "zulu", "amazon")))
+    stop("Wrong JRE provider specified. Possible values are adopt, zulu, amazon.")
 
   if (provider == "adopt") {
-    cat("Instalējam AdoptOpenJDK, https://adoptopenjdk.net/ \n")
+    cat("Installing AdoptOpenJDK, https://adoptopenjdk.net/\n")
   } else if (provider == "zulu") {
-    cat("Instalējam Zulu JDK, https://www.azul.com/downloads/zulu/ \n")
+    cat("Installing Zulu JDK, https://www.azul.com/downloads/zulu/\n")
   } else if (provider == "amazon") {
-    cat("Instalējam Amazon Corretto, https://aws.amazon.com/corretto/ \n")
+    cat("Installing Amazon Corretto, https://aws.amazon.com/corretto/\n")
   }
 
-  cat("Instalācija tiek veikta folderī:", path.jre, "\n")
+
+  # Version
+  version <- as.integer(el(version))
+  if (!(version %in% c(8L, 11L))) stop("Version should be 8 or 11")
+  cat("Java version:", version, "\n")
+
+
+  if (provider == "amazon" & version == 11L)
+    cat("JDK version is available only\n")
+
+
+  # Install folder
+  cat("Installation in folder:", path.jre, "\n")
   dir.create(path.jre, showWarnings = FALSE)
 
+
+  # Load HTML doc
   if (provider == "adopt") {
     base.url <- "https://github.com"
     html.doc <- read_html(file.path(base.url,
-                                    "AdoptOpenJDK/openjdk8-binaries/releases"))
+                                    paste0("AdoptOpenJDK/openjdk", version,
+                                           "-binaries/releases")))
   } else if (provider == "zulu") {
     base.url <- "https://cdn.azul.com/zulu/bin"
     html.doc <- read_html(base.url)
   } else if (provider == "amazon") {
     base.url <- NA_character_
-    html.doc <- read_html("https://github.com/corretto/corretto-8/releases")
+    html.doc <- NULL
   }
 
-  url.list <- html_nodes(html.doc, "a") %>% html_attr(name = "href")
+  if (!is.null(html.doc))
+    url.list <- html_nodes(html.doc, "a") %>% html_attr(name = "href")
 
   if (provider == "adopt") {
-    down.list <- grep("jre_x64_windows_hotspot_8u.*(zip|zip.sha256.txt)$",
+    down.list <- grep("jre_x64_windows_hotspot.*(zip|zip.sha256.txt)$",
                       url.list, value = T)
   } else if (provider == "zulu") {
-    down.list <- grep("fx-jre8.*-win_x64.zip$", url.list, value = T)
+    down.list <- grep(paste0("fx-jre", version, ".*-win_x64.zip$"),
+                      url.list, value = T)
   } else if (provider == "amazon") {
-    down.list <- grep("download.*windows-x64-jre.zip$", url.list, value = T)
+    down.list <- NA_character_
   }
 
-  if (length(down.list) == 0L) stop("Neizdevās atrast instalācijas failu")
+  if (length(down.list) == 0L) stop("Installation file was not found")
 
   down.list <- sort(down.list, decreasing = T)
 
-  zip.name <- el(grep("zip$", down.list, value = T))
+  if (provider %in% c("adopt", "zulu")) {
+    zip.name <- el(grep("zip$", down.list, value = T))
+  } else if (provider == "amazon" & version == 8L) {
+    zip.name <- "https://corretto.aws/downloads/latest/amazon-corretto-8-x64-windows-jre.zip"
+  } else if (provider == "amazon" & version == 11L) {
+    zip.name <- "https://corretto.aws/downloads/latest/amazon-corretto-11-x64-windows-jdk.zip"
+  }
+
   zip.base.name <- basename(zip.name)
 
-  cat("Instalācijas fails:", zip.base.name, "\n")
+  cat("Instalation file:", zip.base.name, "\n")
 
   if (is.na(base.url)) {
     down.url <- zip.name
@@ -71,21 +101,40 @@ install.open.jre <- function(path.jre = file.path(Sys.getenv("HOME"),
                   method = "wininet")
   }
 
-  # Pārbaude
+  # Test checksum
   if (provider == "adopt") {
     txt.name <- el(grep("txt$", down.list, value = T))
-
-    if (!file.exists(file.path(path.jre, basename(txt.name)))) {
-      download.file(url = file.path(base.url, txt.name),
-                    destfile = file.path(path.jre, basename(txt.name)),
-                    method = "wininet")
+    con <- url(file.path(base.url, txt.name))
+    checksum <- sub(" .*$", "", readLines(con, warn = FALSE))
+    close(con)
+  } else if (provider == "amazon") {
+    if (version == 8L) {
+      txt.name <- "https://corretto.aws/downloads/latest_checksum/amazon-corretto-8-x64-windows-jre.zip"
+    } else if (version == 11L) {
+      txt.name <- "https://corretto.aws/downloads/latest_checksum/amazon-corretto-11-x64-windows-jdk.zip"
     }
-
-    checksum <- read.table(file.path(path.jre, basename(txt.name)))$V1
-    con <- file(file.path(path.jre, zip.base.name))
-    if (gsub(":", "", sha256(x = con)) != checksum) stop("Neparezs fails")
+    con <- url(txt.name)
+    checksum <- readLines(con, warn = FALSE)
+    close(con)
   }
 
+  if (provider %in% c("adopt", "amazon")) {
+    con <- file(file.path(path.jre, zip.base.name))
+  }
+
+  if (provider == "adopt") {
+    testsum <- sha256(x = con)
+  } else if (provider == "amazon") {
+    testsum <- md5(x = con)
+  }
+
+  if (provider %in% c("adopt", "amazon")) {
+    if (gsub(":", "", testsum) == checksum) {
+      cat("Checksum test: OK")
+    } else {
+      stop("Checksum test failed")
+    }
+  }
 
   # unzip
   dir.name <- file.path(path.jre,
@@ -101,10 +150,15 @@ install.open.jre <- function(path.jre = file.path(Sys.getenv("HOME"),
     cat("JAVA_HOME:", java_home, "\n")
   }
 
-  cat("Instalācija ir pabeigta\n")
+  cat("Instalation is complete\n")
 }
 
-# install.open.jre()
-# install.open.jre(provider = "adopt")
-# install.open.jre(provider = "amazon")
-# install.open.jre(provider = "zulu")
+# install.open.jre(provider = "adopt" , version = 8L)
+# install.open.jre(provider = "amazon", version = 8L)
+# install.open.jre(provider = "zulu"  , version = 8L)
+
+# install.open.jre(provider = "adopt" , version = 11L)
+# install.open.jre(provider = "amazon", version = 11L)
+# install.open.jre(provider = "zulu"  , version = 11L)
+
+install.open.jre()
