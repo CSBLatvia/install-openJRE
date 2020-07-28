@@ -1,7 +1,7 @@
 ---
 title: "Open Java Runtime Environment instalācija"
 author: "MLiberts"
-date: "2020-07-28 17:28:43"
+date: "2020-07-28 17:33:54"
 output:
   html_document: 
     keep_md: yes
