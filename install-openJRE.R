@@ -8,16 +8,17 @@ install.open.jre <- function(path.jre = file.path(gsub("\\\\", "/",
                              provider = "amazon",
                              version = 11L) {
 
+  # Test OS
+  if (.Platform$OS.type != "windows") stop("Works only on Windows")
+
+
+  # Test and load packages
   x <- rownames(installed.packages())
   if (!"rvest" %in% x) stop("Please install the rvest package!")
   if (!"openssl" %in% x) stop("Please install the openssl package!")
 
-  # Packages
   library(rvest)
   library(openssl)
-
-  # Test OS
-  if (.Platform$OS.type != "windows") stop("Works only on Windows")
 
 
   # Provider
