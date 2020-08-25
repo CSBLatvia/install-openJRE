@@ -1,16 +1,20 @@
 # Install JRE
-
-# Packages
-require(rvest)
-require(openssl)
-
 # Function definition
+
 install.open.jre <- function(path.jre = file.path(gsub("\\\\", "/",
                                                        Sys.getenv("HOME")),
                                                   "OpenJRE"),
                              set.env.variable = TRUE,
                              provider = "amazon",
                              version = 11L) {
+
+  x <- rownames(installed.packages())
+  if (!"rvest" %in% x) stop("Please install the rvest package!")
+  if (!"openssl" %in% x) stop("Please install the openssl package!")
+
+  # Packages
+  library(rvest)
+  library(openssl)
 
   # Test OS
   if (.Platform$OS.type != "windows") stop("Works only on Windows")
@@ -161,4 +165,5 @@ install.open.jre <- function(path.jre = file.path(gsub("\\\\", "/",
 # install.open.jre(provider = "amazon", version = 11L)
 # install.open.jre(provider = "zulu"  , version = 11L)
 
-install.open.jre()
+install.open.jre(version = 8)
+install.open.jre(version = 11)
