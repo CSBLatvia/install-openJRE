@@ -1,11 +1,18 @@
 # Install JRE
 # Function definition
 
+# Function aparameters for testing
+#
+# path.jre <- file.path(gsub("\\\\", "/", Sys.getenv("HOME")), "OpenJRE")
+# set.env.variable <- TRUE
+# provider <- "amazon"
+# version <- 11L
+
 install.open.jre <- function(path.jre = file.path(gsub("\\\\", "/",
                                                        Sys.getenv("HOME")),
                                                   "OpenJRE"),
                              set.env.variable = TRUE,
-                             provider = "amazon",
+                             provider = "adopt",
                              version = 11L) {
 
   # Test OS
@@ -100,11 +107,9 @@ install.open.jre <- function(path.jre = file.path(gsub("\\\\", "/",
     down.url <- file.path(base.url, zip.name)
   }
 
-  if (!file.exists(file.path(path.jre, zip.base.name))) {
-    download.file(url = down.url,
-                  destfile = file.path(path.jre, zip.base.name),
-                  method = "wininet")
-  }
+  download.file(url = down.url,
+                destfile = file.path(path.jre, zip.base.name),
+                method = "wininet")
 
   # Test checksum
   if (provider == "adopt") {
@@ -166,5 +171,11 @@ install.open.jre <- function(path.jre = file.path(gsub("\\\\", "/",
 # install.open.jre(provider = "amazon", version = 11L)
 # install.open.jre(provider = "zulu"  , version = 11L)
 
+# Install Java 8
 install.open.jre(version = 8)
+
+# Install Java 11
 install.open.jre(version = 11)
+
+# Different versions of Java can be installed
+# The last installed Java version will be set with JAVA_HOME as default
