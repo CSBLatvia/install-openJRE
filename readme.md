@@ -1,7 +1,7 @@
 ---
 title: "Open Java Runtime Environment instalācija"
-author: "MLiberts"
-date: "2020-07-28 17:33:54"
+author: "MLiberts, RPavasare"
+date: "2022-11-08 10:08:40"
 output:
   html_document: 
     keep_md: yes
@@ -45,10 +45,10 @@ Teorētiski ir vienalga, kura Open Java versija tiek lietota, jo tās visas ir k
 
 ## Funkcija `install.open.jre`
 
-Open JRE instalāciju var veikt lietotājs. Nav vajadzīga administratora palīdzība. Lai atvieglotu Open JRE instalāciju, ir sagatavota R funkcija `install.open.jre`. Skatīt failu `install-openJRE.R`. Funkcija veic sekojošus instalācijas soļus:
+Open JRE instalāciju var veikt lietotājs. Nav vajadzīga administratora palīdzība. Lai atvieglotu Open JRE instalāciju, ir sagatavota R funkcija `install.open.jre`. Ar R funkcijas palīdzību ir iespēja instalēt Javu no Amazon vai Zulu provaidera. Skatīt failu `install-openJRE.R`. Funkcija veic sekojošus instalācijas soļus:
 
-- No izvēlētā provaidera mājas lapas tiek lejupielādēta pēdējā Java 8 JRE portable versija (zip fails).
-- Tiek vaikta faila pārbaude ar pārbaudes summu. Tikai AdoptJDK un Amazon gadījumā.
+- No izvēlētā provaidera mājas lapas tiek lejupielādēta lietotāja norādītā Java versija (zip fails).
+- Tiek vaikta faila pārbaude ar pārbaudes summu. Tikai Amazon gadījumā.
 - Tiek atarhivēts zip faila saturs.
 - Pēc noklusējuma tiek definēts vides mainīgais (*environment variable*) `JAVA_HOME`. Šo var atslēgt ar funkcijas argumentu `set.env.variable = FALSE`.
 
@@ -56,11 +56,10 @@ Pēc noklusējuma faili tiek saglabāti mapē `C:\Users\[user]\Documents\OpenJRE
 
 Java provaideri var izvēlēties ar funkcijas parametru `provider`. Iespējamās vērtības ir:
 
-- `adopt`: instalēs AdoptOpenJDK,
-- `amazon`: instalēs Amazon Corretto (noklusētā vērtība),
+- `amazon`: instalēs Amazon Corretto,
 - `zulu`: instalēs Zulu JDK.
 
-Ir iespējams instalēt Java versijas 8 un 11 (noklusētā vērtība). Abas ir LTS (*long term support*) versijas.
+Ir iespējams instalēt dažādākas Java versijas. Javas 7, 8, 11 un 17 ir LTS (*long term support*) versijas.
 
 
 

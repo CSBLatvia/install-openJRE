@@ -1,7 +1,37 @@
 # Install JRE
+
+# Test and load packages
+x <- rownames(installed.packages())
+if (!"rvest" %in% x) stop("Please install the rvest package!")
+if (!"data.table" %in% x) stop("Please install the data.table package!")
+if (!"openssl" %in% x) stop("Please install the openssl package!")
+
+library(rvest)
+library(data.table)
+library(openssl)
+
+# Check for available Java versions
+url <-  "https://dev.java/download/releases/"
+
+java <- url %>%
+  read_html() %>%
+  html_nodes("table") %>%
+  html_table(fill = T) %>%
+  lapply(., function(x) setNames(x, c("Version", "Initial Release", "Current Release",
+                                      "Version Info", "End of Life")))
+
+java_versions <- data.table(java[[1]])[, -c(4)]
+
+java_versions <- java_versions[, `Current Release` := gsub('\n\t\t\t\t\t\t','', `Current Release`)]
+java_versions
+
+# Future Release
+future_release <- data.table(java[[2]])[, -c(3)]
+future_release
+
 # Function definition
 
-# Function aparameters for testing
+# Function parameters for testing
 #
 # path.jre <- file.path(gsub("\\\\", "/", Sys.getenv("HOME")), "OpenJRE")
 # set.env.variable <- TRUE
@@ -12,31 +42,19 @@ install.open.jre <- function(path.jre = file.path(gsub("\\\\", "/",
                                                        Sys.getenv("HOME")),
                                                   "OpenJRE"),
                              set.env.variable = TRUE,
-                             provider = "adopt",
-                             version = 11L) {
+                             provider = provider,
+                             version = version) {
 
   # Test OS
   if (.Platform$OS.type != "windows") stop("Works only on Windows")
 
-
-  # Test and load packages
-  x <- rownames(installed.packages())
-  if (!"rvest" %in% x) stop("Please install the rvest package!")
-  if (!"openssl" %in% x) stop("Please install the openssl package!")
-
-  library(rvest)
-  library(openssl)
-
-
   # Provider
   provider <- tolower(el(as.character(provider)))
 
-  if (!(provider %in% c("adopt", "zulu", "amazon")))
-    stop("Wrong JRE provider specified. Possible values are adopt, zulu, amazon.")
+  if (!(provider %in% c("zulu", "amazon")))
+    stop("Wrong JRE provider specified. Possible values are zulu or amazon.")
 
-  if (provider == "adopt") {
-    cat("Installing AdoptOpenJDK, https://adoptopenjdk.net/\n")
-  } else if (provider == "zulu") {
+  if (provider == "zulu") {
     cat("Installing Zulu JDK, https://www.azul.com/downloads/zulu/\n")
   } else if (provider == "amazon") {
     cat("Installing Amazon Corretto, https://aws.amazon.com/corretto/\n")
@@ -45,12 +63,8 @@ install.open.jre <- function(path.jre = file.path(gsub("\\\\", "/",
 
   # Version
   version <- as.integer(el(version))
-  if (!(version %in% c(8L, 11L))) stop("Version should be 8 or 11")
   cat("Java version:", version, "\n")
 
-
-  if (provider == "amazon" & version == 11L)
-    cat("JDK version is available only\n")
 
 
   # Install folder
@@ -59,12 +73,7 @@ install.open.jre <- function(path.jre = file.path(gsub("\\\\", "/",
 
 
   # Load HTML doc
-  if (provider == "adopt") {
-    base.url <- "https://github.com"
-    html.doc <- read_html(file.path(base.url,
-                                    paste0("AdoptOpenJDK/openjdk", version,
-                                           "-binaries/releases")))
-  } else if (provider == "zulu") {
+ if (provider == "zulu") {
     base.url <- "https://cdn.azul.com/zulu/bin"
     html.doc <- read_html(base.url)
   } else if (provider == "amazon") {
@@ -75,10 +84,7 @@ install.open.jre <- function(path.jre = file.path(gsub("\\\\", "/",
   if (!is.null(html.doc))
     url.list <- html_nodes(html.doc, "a") %>% html_attr(name = "href")
 
-  if (provider == "adopt") {
-    down.list <- grep("jre_x64_windows_hotspot.*(zip|zip.sha256.txt)$",
-                      url.list, value = T)
-  } else if (provider == "zulu") {
+  if (provider == "zulu") {
     down.list <- grep(paste0("fx-jre", version, ".*-win_x64.zip$"),
                       url.list, value = T)
   } else if (provider == "amazon") {
@@ -89,12 +95,12 @@ install.open.jre <- function(path.jre = file.path(gsub("\\\\", "/",
 
   down.list <- sort(down.list, decreasing = T)
 
-  if (provider %in% c("adopt", "zulu")) {
+  if (provider %in% c("zulu")) {
     zip.name <- el(grep("zip$", down.list, value = T))
   } else if (provider == "amazon" & version == 8L) {
     zip.name <- "https://corretto.aws/downloads/latest/amazon-corretto-8-x64-windows-jre.zip"
-  } else if (provider == "amazon" & version == 11L) {
-    zip.name <- "https://corretto.aws/downloads/latest/amazon-corretto-11-x64-windows-jdk.zip"
+  } else if (provider == "amazon" & version >= 8L) {
+    zip.name <- file.path(paste0("https://corretto.aws/downloads/latest/amazon-corretto-",version,"-x64-windows-jdk.zip"))
   }
 
   zip.base.name <- basename(zip.name)
@@ -112,33 +118,26 @@ install.open.jre <- function(path.jre = file.path(gsub("\\\\", "/",
                 method = "wininet")
 
   # Test checksum
-  if (provider == "adopt") {
-    txt.name <- el(grep("txt$", down.list, value = T))
-    con <- url(file.path(base.url, txt.name))
-    checksum <- sub(" .*$", "", readLines(con, warn = FALSE))
-    close(con)
-  } else if (provider == "amazon") {
+  if (provider == "amazon") {
     if (version == 8L) {
       txt.name <- "https://corretto.aws/downloads/latest_checksum/amazon-corretto-8-x64-windows-jre.zip"
-    } else if (version == 11L) {
-      txt.name <- "https://corretto.aws/downloads/latest_checksum/amazon-corretto-11-x64-windows-jdk.zip"
+    } else if (version >= 11L) {
+      txt.name <- paste0("https://corretto.aws/downloads/latest_checksum/amazon-corretto-",version,"-x64-windows-jdk.zip")
     }
     con <- url(txt.name)
     checksum <- readLines(con, warn = FALSE)
     close(con)
   }
 
-  if (provider %in% c("adopt", "amazon")) {
+  if (provider %in% c("amazon")) {
     con <- file(file.path(path.jre, zip.base.name))
   }
 
-  if (provider == "adopt") {
-    testsum <- sha256(x = con)
-  } else if (provider == "amazon") {
+  if (provider == "amazon") {
     testsum <- md5(x = con)
   }
 
-  if (provider %in% c("adopt", "amazon")) {
+  if (provider %in% c("amazon")) {
     if (gsub(":", "", testsum) == checksum) {
       cat("Checksum test: OK")
     } else {
@@ -163,19 +162,13 @@ install.open.jre <- function(path.jre = file.path(gsub("\\\\", "/",
   cat("Instalation is complete\n")
 }
 
-# install.open.jre(provider = "adopt" , version = 8L)
-# install.open.jre(provider = "amazon", version = 8L)
-# install.open.jre(provider = "zulu"  , version = 8L)
 
-# install.open.jre(provider = "adopt" , version = 11L)
 # install.open.jre(provider = "amazon", version = 11L)
 # install.open.jre(provider = "zulu"  , version = 11L)
 
-# Install Java 8
-install.open.jre(version = 8)
+# Install Java
+install.open.jre(provider = "amazon", version = 11L)
 
-# Install Java 11
-install.open.jre(version = 11)
 
 # Different versions of Java can be installed
 # The last installed Java version will be set with JAVA_HOME as default
